@@ -134,8 +134,9 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
 
     // Print stack contents for current AR
     if (leftUpper >= leftLower){
-        for (int i = leftUpper; i >= leftLower; i--)
-            printf(" %d", PAS[i]);  
+        for (int i = leftUpper; i >= leftLower; i--){
+            printf("%d ", PAS[i]); 
+        }   
     }
 
     // If there are locals, print static link, dynamic link, return address, and locals
