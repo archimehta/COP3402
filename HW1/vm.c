@@ -142,33 +142,21 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
 int main(int argc, char *argv[]){
     // Check number of arguments
     if (argc != 2) {
-        fprintf(stderr, "Error: Expected exactly one argument (input file).\n");
+        printf("Error: Expected exactly one argument (input file).\n");
         return 1;
     }
 
     // Open the file
     FILE *ifp = fopen(argv[1], "r");
-    if (ifp == NULL) {
-        fprintf(stderr, "Error: Cannot open file %s\n", argv[1]);
-        return 1;
-    }
 
     // Get the data
-    // int tracker = MAX_SIZE - 1;//499;
-    // while (!feof(ifp)) {
-    //     fscanf(ifp, "%d", &PAS[tracker]); tracker--;
-    //     fscanf(ifp, "%d", &PAS[tracker]); tracker--;
-    //     fscanf(ifp, "%d", &PAS[tracker]); tracker--;
-    // }
-    // fclose(ifp);
-
-    int op, L, M;
-    int tracker = 499;
-    while (fscanf(ifp, "%d %d %d", &op, &L, &M) == 3) {
-        PAS[tracker--] = op;
-        PAS[tracker--] = L;
-        PAS[tracker--] = M;
+    int tracker = MAX_SIZE - 1; //499
+    while (!feof(ifp)) {
+        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
+        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
+        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
     }
+    fclose(ifp);
 
     // Set up registers
     int PC = MAX_SIZE - 1;
@@ -278,7 +266,7 @@ int main(int argc, char *argv[]){
             PAS[SP-2] = BP;
             PAS[SP-3] = PC;
             BP = SP-1;
-            PC = 499-M;
+            PC = MAX_SIZE-1-M;
             print(L, M, PC, BP, SP, OP);
         }
         // INC
@@ -288,13 +276,13 @@ int main(int argc, char *argv[]){
         }
         // JMP
         else if(OP==7){
-            PC = 499 - M;
+            PC = MAX_SIZE - 1 - M;
             print(L, M, PC, BP, SP, OP);
         }
         // JPC
         else if(OP==8){
             if(PAS[SP]==0){
-                PC = 499 - M;
+                PC = MAX_SIZE - 1 - M;
             }
             SP += 1;
             print(L, M, PC, BP, SP, OP);
