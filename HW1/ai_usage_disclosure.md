@@ -33,12 +33,11 @@ What is the stack and what do each of the numbers represent on each side of the 
 
 ### AI Output/Results
 [Describe what the AI tool provided in response]
-AI explained where the stack values are coming from and what is happening on each side of the |. It gave the code to complete the printing of the stack values.
+AI explained where the stack values are coming from and what is happening on each side of the |. It gave sample code to help us understand how to print the stack values.
 
 ### How Output was Verified/Edited
 [Explain how you verified accuracy, made modifications, or tested the AI output]
 We tested the AI code with the sample values and made some modifications to match our variables. 
-[e.g., Tested the corrected code with sample inputs; Verified encryption explanations against textbook; Implemented suggested security measures and tested functionality]
 
 ### Multiple Iterations (if applicable)
 [If you used AI tools multiple times, provide a dialogue/conversation summary]
