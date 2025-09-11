@@ -158,13 +158,26 @@ int main(int argc, char *argv[]){
 
     // Open the file
     FILE *ifp = fopen(argv[1], "r");
+    if (!ifp) {
+        printf("Error: Could not open file %s\n", argv[1]);
+        return 1;
+    }
 
     // Get the data
     int tracker = MAX_SIZE - 1; //499
     while (!feof(ifp)) {
-        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
-        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
-        fscanf(ifp, "%d", &PAS[tracker]); tracker--;
+        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+            printf("Error reading PAS value\n");
+        }
+        tracker--;
+        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+            printf("Error reading PAS value\n");
+        }
+        tracker--;
+        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+            printf("Error reading PAS value\n");
+        }
+        tracker--;
     }
     fclose(ifp);
 
@@ -310,7 +323,9 @@ int main(int argc, char *argv[]){
                 SP -= 1;
                 int input;
                 printf("Please Enter an Integer: ");
-                scanf("%d", &input);
+                if (scanf("%d", &input) != 1) {
+                    printf("Error reading input\n");
+                }
                 PAS[SP] = input;
                 print(L, M, PC, BP, SP, OP);
             }
