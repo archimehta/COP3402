@@ -21,9 +21,9 @@ Instructor : Dr. Jie Lin
 Due Date : Friday , September 12th , 2025
 */
 # include <stdio.h>
-# include <string.h>
 # define MAX_SIZE 500
 
+// Initialize stack with zeros
 int PAS[MAX_SIZE] = {0};
 
 // Returns the base address L levels down by following static links
@@ -103,39 +103,48 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
     printf("\t%d\t%d\t%d\t%d\t%d\t", L, M, PC, BP, SP);
 
     // Determine if currently in a callee function and if there are local variables
-    int in_callee = 0, has_locals = 0;
-    if (BP >= 2 && BP < MAX_SIZE) {
-        int ra = PAS[BP - 2];
-        in_callee = (ra != 0);
-        has_locals = (in_callee && (BP - 3) >= SP);
+    int inCaller = 0; 
+    int hasLocals = 0;
+    if (BP >= 2 && BP < MAX_SIZE){
+        int RA = PAS[BP-2];
+        inCaller = (RA != 0);
+        hasLocals = (inCaller && (BP-3) >= SP);
     }
 
     // Calculate stack bounds for printing
-    int left_upper, left_lower;
-    if (in_callee) {
-        int callerBP = PAS[BP - 1];        
-        left_upper = (callerBP >= 0 && callerBP < MAX_SIZE) ? callerBP : BP;
-        left_lower = BP + 1;    // Locals start after BP               
-    } else {
-        left_upper = BP;
-        left_lower = SP;
+    int leftUpper;
+    int leftLower;
+    if (inCaller){
+        int callerBP = PAS[BP-1];        
+        leftUpper = (callerBP >= 0 && callerBP < MAX_SIZE) ? callerBP : BP;
+        leftLower = BP + 1;    // Locals start after BP               
+    } 
+    else{
+        leftUpper = BP;
+        leftLower = SP;
     }
-    if (left_upper >= MAX_SIZE) left_upper = MAX_SIZE - 1;
-    if (left_lower < 0) left_lower = 0;
+
+    if (leftUpper >= MAX_SIZE){
+        leftUpper = MAX_SIZE - 1;
+    }
+    
+    if (leftLower < 0){
+        leftLower = 0;
+    } 
 
     // Print stack contents for current AR
-    if (left_upper >= left_lower) {
-        for (int i = left_upper; i >= left_lower; --i)
+    if (leftUpper >= leftLower){
+        for (int i = leftUpper; i >= leftLower; i--)
             printf(" %d", PAS[i]);  
     }
 
     // If there are locals, print static link, dynamic link, return address, and locals
-    if (has_locals) {
-        printf(" | %d %d %d", PAS[BP], PAS[BP - 1], PAS[BP - 2]); /* SL DL RA */
-        for (int i = BP - 3; i >= SP; --i)
+    if (hasLocals){
+        printf(" | %d %d %d", PAS[BP], PAS[BP-1], PAS[BP-2]); /* SL DL RA */
+        for (int i = BP - 3; i >= SP; i--){
             printf(" %d", PAS[i]);
+        }
     }
-
     printf("\n");
 }
 
@@ -167,12 +176,12 @@ int main(int argc, char *argv[]){
     printf("\tL\tM\tPC\tBP\tSP\tstack\n");
     printf("Initial values:\t\t%d\t%d\t%d\n", PC, BP, SP);
 
-    // Flag to keep track if we halt
+    // Flag to keep track if we halt (SYS 9 0 3)
     int halt = 1;
 
     // Loop to go through all instructions
     while(halt){
-        // The Fetch Cycle: Copy instruction at PC and decrement by C
+        // The Fetch Cycle: Copy instruction at PC and decrement by 3
         int OP = PAS[PC];
         int L = PAS[PC-1];
         int M = PAS[PC-2];
@@ -311,6 +320,5 @@ int main(int argc, char *argv[]){
             }
         } 
     }
-    
     return 0;
 }
