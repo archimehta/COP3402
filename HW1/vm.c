@@ -105,7 +105,7 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
     // Determine if currently in a callee function and if there are local variables
     int inCaller = 0; 
     int hasLocals = 0;
-    if (BP >= 2 && BP < MAX_SIZE){
+    if(BP >= 2 && BP < MAX_SIZE){
         int RA = PAS[BP-2];
         inCaller = (RA != 0);
         hasLocals = (inCaller && (BP-3) >= SP);
@@ -114,7 +114,7 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
     // Calculate stack bounds for printing
     int leftUpper;
     int leftLower;
-    if (inCaller){
+    if(inCaller){
         int callerBP = PAS[BP-1];        
         leftUpper = (callerBP >= 0 && callerBP < MAX_SIZE) ? callerBP : BP;
         leftLower = BP + 1;    // Locals start after BP               
@@ -124,23 +124,23 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
         leftLower = SP;
     }
 
-    if (leftUpper >= MAX_SIZE){
+    if(leftUpper >= MAX_SIZE){
         leftUpper = MAX_SIZE - 1;
     }
     
-    if (leftLower < 0){
+    if(leftLower < 0){
         leftLower = 0;
     } 
 
     // Print stack contents for current AR
-    if (leftUpper >= leftLower){
+    if(leftUpper >= leftLower){
         for (int i = leftUpper; i >= leftLower; i--){
             printf("%d ", PAS[i]); 
         }   
     }
 
     // If there are locals, print static link, dynamic link, return address, and locals
-    if (hasLocals){
+    if(hasLocals){
         printf(" | %d %d %d", PAS[BP], PAS[BP-1], PAS[BP-2]); /* SL DL RA */
         for (int i = BP - 3; i >= SP; i--){
             printf(" %d", PAS[i]);
@@ -151,30 +151,30 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
 
 int main(int argc, char *argv[]){
     // Check number of arguments
-    if (argc != 2) {
+    if(argc != 2){
         printf("Error: Expected exactly one argument (input file).\n");
         return 1;
     }
 
     // Open the file
     FILE *ifp = fopen(argv[1], "r");
-    if (!ifp) {
+    if(!ifp){
         printf("Error: Could not open file %s\n", argv[1]);
         return 1;
     }
 
     // Get the data
     int tracker = MAX_SIZE - 1; //499
-    while (!feof(ifp)) {
-        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+    while(!feof(ifp)) {
+        if(fscanf(ifp, "%d", &PAS[tracker]) != 1){
             printf("Error reading PAS value\n");
         }
         tracker--;
-        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+        if(fscanf(ifp, "%d", &PAS[tracker]) != 1){
             printf("Error reading PAS value\n");
         }
         tracker--;
-        if (fscanf(ifp, "%d", &PAS[tracker]) != 1){
+        if(fscanf(ifp, "%d", &PAS[tracker]) != 1){
             printf("Error reading PAS value\n");
         }
         tracker--;
