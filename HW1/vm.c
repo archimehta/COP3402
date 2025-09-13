@@ -36,7 +36,6 @@ int base(int BP, int L){
     return arb;
 }
 
-// Print the instructions
 void print(int L, int M, int PC, int BP, int SP, int OP){
     // Print the mneumonic for the OP code
     if(OP==1){
@@ -102,48 +101,48 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
     // Print the instruction details and register values
     printf("\t%d\t%d\t%d\t%d\t%d\t", L, M, PC, BP, SP);
 
-    // Determine if currently in a callee function and if there are local variables
-    int inCaller = 0; 
-    int hasLocals = 0;
-    if(BP >= 2 && BP < MAX_SIZE){
-        int RA = PAS[BP-2];
-        inCaller = (RA != 0);
-        hasLocals = (inCaller && (BP-3) >= SP);
+    // If the BP is not valid, we don't print
+    if(BP <= 0){
+        printf("\n");
+        return;
     }
 
-    // Calculate stack bounds for printing
-    int leftUpper;
-    int leftLower;
-    if(inCaller){
-        int callerBP = PAS[BP-1];        
-        leftUpper = (callerBP >= 0 && callerBP < MAX_SIZE) ? callerBP : BP;
-        leftLower = BP + 1;    // Locals start after BP               
-    } 
-    else{
-        leftUpper = BP;
-        leftLower = SP;
+    // Collect the BP's to find the AR boundaries
+    int boundaries[50];
+    int count = 0;
+    int temp_bp = BP;
+    while(temp_bp > 0){
+        boundaries[count++] = temp_bp;
+        temp_bp = PAS[temp_bp - 1];
     }
 
-    if(leftUpper >= MAX_SIZE){
-        leftUpper = MAX_SIZE - 1;
-    }
-    
-    if(leftLower < 0){
-        leftLower = 0;
-    } 
+    // Print each AR from most recent to oldest
+    for(int i = count - 1; i >= 0; i--){
+        int frame_bp = boundaries[i];
+        int frame_sp;
 
-    // Print stack contents for current AR
-    if(leftUpper >= leftLower){
-        for (int i = leftUpper; i >= leftLower; i--){
-            printf("%d ", PAS[i]); 
-        }   
-    }
+        if(i == 0){
+            frame_sp = SP;
+        } 
+        else{
+            frame_sp = boundaries[i-1] + 1;
+        }
 
-    // If there are locals, print static link, dynamic link, return address, and locals
-    if(hasLocals){
-        printf(" | %d %d %d", PAS[BP], PAS[BP-1], PAS[BP-2]); /* SL DL RA */
-        for (int i = BP - 3; i >= SP; i--){
-            printf(" %d", PAS[i]);
+        // Print the values in the current frame's boundary
+        if(frame_bp >= frame_sp){
+            for(int j = frame_bp; j >= frame_sp; j--){
+                printf("%d ", PAS[j]);
+            }
+        }
+
+        // Prints the separator only if there is a next frame and it has locals
+        if(i > 0){
+            int next_frame_bp = boundaries[i-1];
+            int next_frame_sp = (i-1 == 0) ? SP : boundaries[i-2] + 1;
+            
+            if(next_frame_bp >= next_frame_sp){
+                printf("| ");
+            }
         }
     }
     printf("\n");

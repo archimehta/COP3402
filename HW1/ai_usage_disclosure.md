@@ -15,10 +15,10 @@ Complete this template with detailed information about your AI usage. Submit thi
 ## AI Tool #1
 
 ### Tool Name
-ChatGPT
+Gemini
 
 ### Version/Model
-GPT-5
+2.5 Pro
 
 ### Date(s) Used
 September 10-11, 2025
