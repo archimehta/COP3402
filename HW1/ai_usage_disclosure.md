@@ -21,7 +21,7 @@ Gemini
 2.5 Pro
 
 ### Date(s) Used
-September 10-11, 2025
+September 11-12, 2025
 
 ### Specific Parts of Assignment
 [Describe exactly which portions of your work involved AI assistance]
