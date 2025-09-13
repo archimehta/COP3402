@@ -108,6 +108,7 @@ void print(int L, int M, int PC, int BP, int SP, int OP){
     }
 
     // Collect the BP's to find the AR boundaries
+    // Creating additional array to assist with printing as permitted by updated assignment guidelines
     int boundaries[50];
     int count = 0;
     int temp_bp = BP;
