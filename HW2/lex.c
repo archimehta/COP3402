@@ -304,15 +304,17 @@ int main(int argc, char *argv[]){
                     printf("%c%c\t%d\n", ch, nextChar, token);
                 }
                 else{
-                    printf("Invalid symbols\n");
+                    token = skipsym;
+                    printf("%c\tInvalid symbols\n", ch);
                 }
             }
             else{
+                token = skipsym;
                 printf("Invalid symbols\n");
                 continue;
             }
             // print statement for one char special symbols
-            if(token != neqsym && token != leqsym && token != geqsym && token !=becomessym){
+            if(token != neqsym && token != leqsym && token != geqsym && token !=becomessym && token != skipsym){
                 printf("%c\t%d\n", ch, token);
             }
         }

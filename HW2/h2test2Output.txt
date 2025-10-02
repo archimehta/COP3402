@@ -1,0 +1,42 @@
+Source Program: 
+
+ var x, y; */
+/* comment 2 */
+begin
+y := 3; /* add comment
+even multi line
+comments */
+x := y + 56;
+/*
+end.
+/* End of the file */
+*:
+
+Lexeme Table:
+
+lexeme               token type
+var                  29
+x                    2
+,                    16
+y                    2
+;                    17
+*                    6
+/                    7
+begin                20
+y                    2
+:=                   19
+3                    3
+;                    17
+x                    2
+:=                   19
+y                    2
++                    4
+56                   3
+;                    17
+*                    6
+:                    Invalid Symbols
+
+
+Token List:
+
+29 2 x 16 2 y 17 6 7 20 2 y 19 3 3 17 2 x 19 2 y 4 3 56 17 6 1

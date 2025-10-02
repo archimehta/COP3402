@@ -1,0 +1,11 @@
+ var x, y; */
+/* comment 2 */
+begin
+y := 3; /* add comment 
+even multi line 
+comments */
+x := y + 56; 
+/*
+end.
+/* End of the file */
+*:
