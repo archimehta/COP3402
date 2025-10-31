@@ -89,7 +89,7 @@ void addSymbolTable(int kind, char * name, int val, int level, int addr){
     symbol_table[symbolCount].kind = kind;
     strcpy(symbol_table[symbolCount].name, name);
     symbol_table[symbolCount].val = val;
-    symbol_table[symbolCount].level = level;
+    symbol_table[symbolCount].level = 0;
     symbol_table[symbolCount].addr = addr;
     symbol_table[symbolCount].mark = 0;
     symbolCount++;
@@ -243,7 +243,7 @@ void statement(FILE * ofp){
         // if token != becomesym
         if(currentToken != 19){
             printf("Error: assignment statements must use :=\n");
-            fprintf(ofp, "assignment statements must use :=\n");
+            fprintf(ofp, "Error: assignment statements must use :=\n");
             fclose(ofp);
             exit(0);
         }
@@ -287,8 +287,8 @@ void statement(FILE * ofp){
 
         // if token != thensym
         if(currentToken != 24){
-            printf("Error: if must be followed by them\n");
-            fprintf(ofp, "Error: if must be followed by them\n");
+            printf("Error: if must be followed by then\n");
+            fprintf(ofp, "Error: if must be followed by then\n");
             fclose(ofp);
             exit(0);
         }
@@ -307,12 +307,12 @@ void statement(FILE * ofp){
     }
 
     // ✅ consume 'fi'
-    if (currentToken != 23) { // fisym
-        printf("Error: if must be followed by fi\n");
-        fprintf(ofp, "Error: if must be followed by fi\n");
-        fclose(ofp);
-        exit(0);
-    }
+    // if (currentToken != 23) { // fisym
+    //     printf("Error: if must be followed by fi\n");
+    //     fprintf(ofp, "Error: if must be followed by fi\n");
+    //     fclose(ofp);
+    //     exit(0);
+    // }
     nextToken(); // consume fi
     }
 
@@ -488,8 +488,8 @@ void factor(FILE * ofp){
         expression(ofp);
         // if token != rparentsym
         if(currentToken != 15){
-            printf("Error: right parenthesis is missing\n");
-            fprintf(ofp, "Error: right parenthesis is missing\n");
+            printf("Error: right parenthesis must follow left parenthesis\n");
+            fprintf(ofp, "Error: right parenthesis must follow left parenthesis\n");
             fclose(ofp);
             exit(0);
         }
@@ -534,6 +534,17 @@ void term(FILE * ofp){
 }
 
 void expression(FILE * ofp){
+    if (currentToken != 2 && // identsym
+        currentToken != 3 && // numbersym
+        currentToken != 4 && // plussym
+        currentToken != 5 && // minussym
+        currentToken != 14)  // lparentsym
+    {
+        printf("Error: arithmetic equations must contain operands, parentheses, numbers, or symbols\n");
+        fprintf(ofp, "Error: arithmetic equations must contain operands, parentheses, numbers, or symbols\n");
+        fclose(ofp);
+        exit(0);
+    }
     // if token == minussym
     if(currentToken == 5){
         nextToken();
@@ -587,6 +598,14 @@ void expression(FILE * ofp){
     }
 }
 
+void mark(void){
+    for(int i=0; i<symbolCount; i++){
+        if(symbol_table[i].mark == 0){
+            symbol_table[i].mark = 1;
+        }
+    }
+}
+
 // F3 BLOCK Function
 void block(FILE * ofp){
     int jmpIdx = instrCodeIndex;
@@ -601,11 +620,8 @@ void block(FILE * ofp){
     
     statement(ofp);
 
-    for(int i=0; i<symbolCount; i++){
-        if(symbol_table[i].mark == 0){
-            symbol_table[i].mark = 1;
-        }
-    }
+    // marking all symbol table entries with 1 after execution as discussed with Dr. Lin in class
+    mark();
 }
 
 // F2 PROGRAM Function
