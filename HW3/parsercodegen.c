@@ -637,7 +637,7 @@ int main(void){
 
     int count = 0;
     while(!feof(ifp)){
-        fscanf(ifp, "%d", &tokenList[count].token);
+        if(fscanf(ifp, "%d", &tokenList[count].token));
         if(tokenList[count].token == 1){
             printf("Error: Scanning error detected by lexer (skipsym present)\n");
             fprintf(ofp, "Error: Scanning error detected by lexer (skipsym present)\n");
@@ -646,7 +646,7 @@ int main(void){
             exit(0);
         }
         if(tokenList[count].token == 2 || tokenList[count].token == 3){
-            fscanf(ifp, "%s", tokenList[count].lexeme);
+            if(fscanf(ifp, "%s", tokenList[count].lexeme));
         }
         count++;
     }
