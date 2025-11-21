@@ -20,7 +20,7 @@ To Execute (on Eustis):
     ./parsercodegen_complete
     ./vm elf.txt
 
-    where:
+where:
     <input_file.txt> is the path to the PL/0 source program
 
 Notes:
